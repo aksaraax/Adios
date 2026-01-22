@@ -33,7 +33,7 @@ local CONFIG: KeyAuthConfig = {
 	Version = "1.0",
 }
 
-local MAIN_SCRIPT_URL = "https://raw.githubusercontent.com/aksaraax/Sedid-Helper/main/CDID_Helper.luau"
+local MAIN_SCRIPT_URL = "https://raw.githubusercontent.com/aksaraax/Sedid-Helper/main/helper.luau"
 
 local function getHWID(): string
 	return "HWID-DISABLED"
