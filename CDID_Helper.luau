@@ -8,7 +8,7 @@ type PlayerInfo = {
 	Cash: number?,
 }
 
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/aksaraax/Sedid-Helper/main/WindUI/main.luau"))()
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
