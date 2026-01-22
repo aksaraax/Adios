@@ -36,6 +36,10 @@ local CONFIG: KeyAuthConfig = {
 local MAIN_SCRIPT_URL = "https://raw.githubusercontent.com/aksaraax/Sedid-Helper/main/CDID_Helper.luau"
 
 local function getHWID(): string
+	return "HWID-DISABLED"
+	
+	--[[
+	-- HWID Lock Mode :
 	local hwid: string? = nil
 	
 	pcall(function()
@@ -53,6 +57,7 @@ local function getHWID(): string
 	if hwid then return hwid end
 	
 	return tostring(Players.LocalPlayer.UserId)
+	]]
 end
 
 local function httpRequest(options: {Url: string, Method: string}): HttpResponse?
