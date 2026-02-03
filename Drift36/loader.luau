@@ -981,7 +981,9 @@ local function getPlayerCarModel()
 	return "m5e34" 
 end
 
-
+local AutofarmModule = {}
+local autofarmEnabled = false
+local autofarmThread = nil
 local currentCheckpoint = 0
 local raceInProgress = false
 local countdownNumber = 99
@@ -1443,3 +1445,4 @@ task.spawn(function()
 end)
 
 return Window
+
