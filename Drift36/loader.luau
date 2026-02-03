@@ -1,4 +1,3 @@
---!strict
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/aksaraax/Sedid-Helper/main/WindUI/main.luau"))()
 
 local Players = game:GetService("Players")
@@ -1445,4 +1444,5 @@ task.spawn(function()
 end)
 
 return Window
+
 
