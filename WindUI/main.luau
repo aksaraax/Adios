@@ -5377,7 +5377,9 @@ end
 local function isDelimiter(ai)
 if ai==nil then return true end
 local aj=ai.__type
-return aj=="Divider"or aj=="Space"or aj=="Section"or aj=="Code"
+if aj=="Divider"or aj=="Space"or aj=="Section"or aj=="Code"then return true end
+if aj=="Paragraph"and ai.Transparent then return true end
+return false
 end
 
 if isDelimiter(af[ag])then
