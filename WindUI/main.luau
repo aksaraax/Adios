@@ -6024,7 +6024,7 @@ local ad=a.load'l'.New
 
 function ac.New(ae,af)
 af.Hover=false
-af.TextOffset=0
+af.TextOffset=af.Icon and 28 or 0
 af.ParentConfig=af
 af.IsButtons=af.Buttons and#af.Buttons>0 and true or false
 
@@ -6032,12 +6032,35 @@ local ag={
 __type="Paragraph",
 Title=af.Title or"Paragraph",
 Desc=af.Desc or nil,
-
+Icon=af.Icon,
+IconColor=af.IconColor,
+IconSize=af.IconSize or 20,
 Locked=af.Locked or false,
+UIElements={},
 }
 local ah=a.load'B'(af)
 
 ag.ParagraphFrame=ah
+
+if af.Icon then
+local ai=aa.Image(
+af.Icon,
+af.Icon,
+0,
+af.Window.Folder,
+"Paragraph",
+not af.IconColor and true or nil,
+af.IconThemed
+)
+ai.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
+ai.Parent=ah.UIElements.Container.TitleFrame
+ai.LayoutOrder=-99999
+if af.IconColor then
+ai.ImageLabel.ImageColor3=af.IconColor
+end
+ag.UIElements.Icon=ai
+end
+
 if af.Buttons and#af.Buttons>0 then
 local ai=ab("Frame",{
 Size=UDim2.new(1,0,0,38),
@@ -6056,6 +6079,64 @@ for aj,ak in next,af.Buttons do
 local al=ad(ak.Title,ak.Icon,ak.Callback,"White",ai,nil,nil,af.Window.NewElements and 999 or 10)
 al.Size=UDim2.new(1,0,0,38)
 
+end
+end
+
+function ag.SetTitle(ai,aj)
+ag.Title=aj
+if ah.UIElements.Title then
+ah.UIElements.Title.Text=aj
+end
+end
+
+function ag.SetDesc(ai,aj)
+ag.Desc=aj
+if ah.UIElements.Desc then
+ah.UIElements.Desc.Text=aj or""
+if aj then
+ah.UIElements.Desc.Visible=true
+else
+ah.UIElements.Desc.Visible=false
+end
+end
+end
+
+function ag.SetIcon(ai,aj,ak)
+ag.Icon=aj
+if ag.UIElements.Icon then
+if aj then
+local al=aa.Icon(aj)
+if al and al[1] then
+ag.UIElements.Icon.ImageLabel.Image=al[1]
+if al[2] then
+ag.UIElements.Icon.ImageLabel.ImageRectOffset=al[2].ImageRectPosition
+ag.UIElements.Icon.ImageLabel.ImageRectSize=al[2].ImageRectSize
+end
+end
+if ak then
+ag.UIElements.Icon.ImageLabel.ImageColor3=ak
+end
+ag.UIElements.Icon.Visible=true
+else
+ag.UIElements.Icon.Visible=false
+end
+elseif aj then
+local al=aa.Image(
+aj,
+aj,
+0,
+af.Window.Folder,
+"Paragraph",
+not ak and true or nil,
+af.IconThemed
+)
+al.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
+al.Parent=ah.UIElements.Container.TitleFrame
+al.LayoutOrder=-99999
+if ak then
+al.ImageLabel.ImageColor3=ak
+end
+ag.UIElements.Icon=al
 end
 end
 
