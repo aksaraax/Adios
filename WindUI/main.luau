@@ -6027,6 +6027,7 @@ af.Hover=false
 af.TextOffset=af.Icon and 28 or 0
 af.ParentConfig=af
 af.IsButtons=af.Buttons and#af.Buttons>0 and true or false
+af.Transparent=af.Transparent or false
 
 local ag={
 __type="Paragraph",
@@ -6035,12 +6036,17 @@ Desc=af.Desc or nil,
 Icon=af.Icon,
 IconColor=af.IconColor,
 IconSize=af.IconSize or 20,
+Transparent=af.Transparent,
 Locked=af.Locked or false,
 UIElements={},
 }
 local ah=a.load'B'(af)
 
 ag.ParagraphFrame=ah
+
+if af.Transparent then
+ah.UIElements.Main.ImageTransparency=1
+end
 
 if af.Icon then
 local ai=aa.Image(
@@ -6053,12 +6059,17 @@ not af.IconColor and true or nil,
 af.IconThemed
 )
 ai.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
-ai.LayoutOrder=-999999
-ai.Parent=ah.UIElements.Container.TitleFrame
+ai.AnchorPoint=Vector2.new(0,0.5)
+ai.Position=UDim2.new(0,12,0.5,0)
+ai.Parent=ah.UIElements.Main
+ai.ZIndex=2
 if af.IconColor then
 ai.ImageLabel.ImageColor3=af.IconColor
 end
 ag.UIElements.Icon=ai
+
+ah.UIElements.Container.Position=UDim2.new(0,ag.IconSize+18,0,0)
+ah.UIElements.Container.Size=UDim2.new(1,-(ag.IconSize+18),1,0)
 end
 
 if af.Buttons and#af.Buttons>0 then
@@ -6131,12 +6142,17 @@ not ak and true or nil,
 af.IconThemed
 )
 al.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
-al.Parent=ah.UIElements.Container.TitleFrame
-al.LayoutOrder=-999999
+al.AnchorPoint=Vector2.new(0,0.5)
+al.Position=UDim2.new(0,12,0.5,0)
+al.Parent=ah.UIElements.Main
+al.ZIndex=2
 if ak then
 al.ImageLabel.ImageColor3=ak
 end
 ag.UIElements.Icon=al
+
+ah.UIElements.Container.Position=UDim2.new(0,ag.IconSize+18,0,0)
+ah.UIElements.Container.Size=UDim2.new(1,-(ag.IconSize+18),1,0)
 end
 end
 
