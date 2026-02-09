@@ -6053,8 +6053,8 @@ not af.IconColor and true or nil,
 af.IconThemed
 )
 ai.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
+ai.LayoutOrder=-999999
 ai.Parent=ah.UIElements.Container.TitleFrame
-ai.LayoutOrder=-99999
 if af.IconColor then
 ai.ImageLabel.ImageColor3=af.IconColor
 end
@@ -6132,7 +6132,7 @@ af.IconThemed
 )
 al.Size=UDim2.new(0,ag.IconSize,0,ag.IconSize)
 al.Parent=ah.UIElements.Container.TitleFrame
-al.LayoutOrder=-99999
+al.LayoutOrder=-999999
 if ak then
 al.ImageLabel.ImageColor3=ak
 end
