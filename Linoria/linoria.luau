@@ -46,73 +46,26 @@ local Library = {
     ScreenGui = ScreenGui;
 };
 
-local IconCache = {};
-local LUCIDE_CDN = 'https://unpkg.com/lucide-static@latest/icons/';
+local LucideIcons = {};
 
-function Library:FetchIcon(Name)
-    if not Name then return nil end
-    if IconCache[Name] then return IconCache[Name] end
-
-    local Success, Data = pcall(function()
-        return game:HttpGet(LUCIDE_CDN .. Name .. '.svg')
+do
+    local ok, result = pcall(function()
+        return loadstring(game:HttpGet('https://raw.githubusercontent.com/aksaraax/Adios/refs/heads/main/Linoria/lucide/icons.luau'))()
     end)
-
-    if not Success or not Data then return nil end
-
-    local PathData = Data:match('d="([^"]+)"')
-    if not PathData then return nil end
-
-    IconCache[Name] = PathData
-    return PathData
+    if ok and type(result) == 'table' then
+        LucideIcons = result
+    end
 end
 
-function Library:CreateIcon(IconName, Properties)
-    if not IconName then return nil end
+function Library:GetLucideImageId(Name)
+    if not Name then return nil end
+    return LucideIcons[string.lower(Name)]
+end
 
-    local PathData = Library:FetchIcon(IconName)
-
-    local Icon = Library:Create('ImageLabel', {
-        BackgroundTransparency = 1;
-        Size = UDim2.fromOffset(16, 16);
-        Image = 'rbxasset://textures/ui/GuiImagePlaceholder.png';
-        ImageTransparency = 1;
-        ZIndex = Properties and Properties.ZIndex or 5;
-        Parent = Properties and Properties.Parent or nil;
-    })
-
-    if Properties then
-        for k, v in next, Properties do
-            if k ~= 'Parent' and k ~= 'ZIndex' then
-                Icon[k] = v
-            end
-        end
+function Library:SetIconMap(Map)
+    for k, v in next, Map do
+        LucideIcons[string.lower(k)] = v
     end
-
-    if PathData then
-        local CanvasGroup = Library:Create('CanvasGroup', {
-            BackgroundTransparency = 1;
-            Size = UDim2.fromScale(1, 1);
-            Parent = Icon;
-        })
-
-        local EditableImage
-        local ok = pcall(function()
-            EditableImage = Instance.new('EditableImage')
-            EditableImage.Size = Vector2.new(24, 24)
-            EditableImage.Parent = Icon
-        end)
-
-        if not ok then
-            Icon.Image = 'rbxassetid://18831share477164'
-            Icon.ImageTransparency = 0
-            Icon.ImageColor3 = Properties and Properties.ImageColor3 or Library.FontColor
-        end
-    end
-
-    Icon.ImageTransparency = 0
-    Icon.Image = ''
-
-    return Icon
 end
 
 function Library:CreateLucideIcon(Name, Parent, Size, Color, ZIdx)
@@ -139,90 +92,16 @@ function Library:CreateLucideIcon(Name, Parent, Size, Color, ZIdx)
         Parent = Container;
     })
 
-    task.spawn(function()
-        local Id = Library:GetLucideImageId(Name)
-        if Id then
-            IconLabel.Image = Id
-        end
-    end)
+    local Id = Library:GetLucideImageId(Name)
+    if Id then
+        IconLabel.Image = Id
+    end
 
     Library:AddToRegistry(IconLabel, {
         ImageColor3 = 'FontColor';
     })
 
     return Container, IconLabel
-end
-
-Library.LucideImageIds = {
-    ['home'] = 'rbxassetid://18831477164';
-    ['settings'] = 'rbxassetid://18831477400';
-    ['search'] = 'rbxassetid://18831477300';
-    ['user'] = 'rbxassetid://18831477500';
-    ['heart'] = 'rbxassetid://18831477200';
-    ['star'] = 'rbxassetid://18831477450';
-    ['bell'] = 'rbxassetid://18831477050';
-    ['check'] = 'rbxassetid://18831477100';
-    ['x'] = 'rbxassetid://18831477550';
-    ['plus'] = 'rbxassetid://18831477250';
-    ['minus'] = 'rbxassetid://18831477150';
-    ['arrow-right'] = 'rbxassetid://18831477000';
-    ['arrow-left'] = 'rbxassetid://18831476950';
-    ['shield'] = 'rbxassetid://18831477350';
-    ['eye'] = 'rbxassetid://18831477120';
-    ['lock'] = 'rbxassetid://18831477130';
-    ['unlock'] = 'rbxassetid://18831477480';
-    ['trash'] = 'rbxassetid://18831477470';
-    ['edit'] = 'rbxassetid://18831477110';
-    ['save'] = 'rbxassetid://18831477280';
-    ['download'] = 'rbxassetid://18831477080';
-    ['upload'] = 'rbxassetid://18831477490';
-    ['refresh-cw'] = 'rbxassetid://18831477260';
-    ['zap'] = 'rbxassetid://18831477560';
-    ['folder'] = 'rbxassetid://18831477140';
-    ['file'] = 'rbxassetid://18831477125';
-    ['image'] = 'rbxassetid://18831477170';
-    ['video'] = 'rbxassetid://18831477510';
-    ['music'] = 'rbxassetid://18831477160';
-    ['globe'] = 'rbxassetid://18831477180';
-    ['map'] = 'rbxassetid://18831477145';
-    ['target'] = 'rbxassetid://18831477460';
-    ['crosshair'] = 'rbxassetid://18831477070';
-    ['sword'] = 'rbxassetid://18831477455';
-    ['wand'] = 'rbxassetid://18831477520';
-    ['gamepad'] = 'rbxassetid://18831477150';
-    ['trophy'] = 'rbxassetid://18831477475';
-    ['crown'] = 'rbxassetid://18831477065';
-    ['flame'] = 'rbxassetid://18831477135';
-    ['sparkles'] = 'rbxassetid://18831477430';
-    ['bot'] = 'rbxassetid://18831477055';
-    ['cpu'] = 'rbxassetid://18831477060';
-    ['wifi'] = 'rbxassetid://18831477530';
-    ['bluetooth'] = 'rbxassetid://18831477045';
-    ['battery'] = 'rbxassetid://18831477030';
-    ['power'] = 'rbxassetid://18831477240';
-    ['moon'] = 'rbxassetid://18831477155';
-    ['sun'] = 'rbxassetid://18831477440';
-    ['cloud'] = 'rbxassetid://18831477058';
-    ['gauge'] = 'rbxassetid://18831477148';
-    ['radar'] = 'rbxassetid://18831477245';
-    ['swords'] = 'rbxassetid://18831477458';
-}
-
-function Library:GetLucideImageId(Name)
-    if not Name then return nil end
-    Name = string.lower(Name)
-
-    if Library.LucideImageIds[Name] then
-        return Library.LucideImageIds[Name]
-    end
-
-    return nil
-end
-
-function Library:SetIconMap(Map)
-    for k, v in next, Map do
-        Library.LucideImageIds[string.lower(k)] = v
-    end
 end
 
 local RainbowStep = 0
@@ -3321,7 +3200,7 @@ function Library:CreateWindow(...)
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
         Position = UDim2.new(0, 8, 0, 25);
-        Size = UDim2.new(1, -16, 1, -33);
+        Size = UDim2.new(1, -16, 1, -52);
         ZIndex = 1;
         Parent = Inner;
     });
@@ -3330,6 +3209,47 @@ function Library:CreateWindow(...)
         BackgroundColor3 = 'BackgroundColor';
         BorderColor3 = 'OutlineColor';
     });
+
+    local FooterOuter = Library:Create('Frame', {
+        BackgroundColor3 = Library.BackgroundColor;
+        BorderColor3 = Library.OutlineColor;
+        Position = UDim2.new(0, 8, 1, -23);
+        Size = UDim2.new(1, -16, 0, 18);
+        ZIndex = 1;
+        Parent = Inner;
+    });
+
+    Library:AddToRegistry(FooterOuter, {
+        BackgroundColor3 = 'BackgroundColor';
+        BorderColor3 = 'OutlineColor';
+    });
+
+    local FooterInner = Library:Create('Frame', {
+        BackgroundColor3 = Library.MainColor;
+        BorderColor3 = Color3.new(0, 0, 0);
+        BorderMode = Enum.BorderMode.Inset;
+        Size = UDim2.new(1, 0, 1, 0);
+        ZIndex = 1;
+        Parent = FooterOuter;
+    });
+
+    Library:AddToRegistry(FooterInner, {
+        BackgroundColor3 = 'MainColor';
+    });
+
+    local FooterLabel = Library:CreateLabel({
+        Position = UDim2.new(0, 6, 0, 0);
+        Size = UDim2.new(1, -12, 1, 0);
+        TextSize = 13;
+        Text = '';
+        TextXAlignment = Enum.TextXAlignment.Left;
+        ZIndex = 1;
+        Parent = FooterInner;
+    });
+
+    function Window:SetFooter(Text)
+        FooterLabel.Text = Text or '';
+    end;
 
     local MainSectionInner = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
@@ -3345,30 +3265,44 @@ function Library:CreateWindow(...)
         BackgroundColor3 = 'BackgroundColor';
     });
 
+    local SidebarWidth = 140
+
     local TabArea = Library:Create('Frame', {
-        BackgroundTransparency = 1;
+        BackgroundColor3 = Library.MainColor;
+        BorderColor3 = Library.OutlineColor;
         Position = UDim2.new(0, 8, 0, 8);
-        Size = UDim2.new(1, -16, 0, 21);
+        Size = UDim2.new(0, SidebarWidth, 1, -16);
         ZIndex = 1;
         Parent = MainSectionInner;
     });
 
+    Library:AddToRegistry(TabArea, {
+        BackgroundColor3 = 'MainColor';
+        BorderColor3 = 'OutlineColor';
+    });
+
     local TabListLayout = Library:Create('UIListLayout', {
-        Padding = UDim.new(0, Config.TabPadding);
-        FillDirection = Enum.FillDirection.Horizontal;
+        Padding = UDim.new(0, Config.TabPadding > 0 and Config.TabPadding or 2);
+        FillDirection = Enum.FillDirection.Vertical;
         SortOrder = Enum.SortOrder.LayoutOrder;
+        Parent = TabArea;
+    });
+
+    Library:Create('UIPadding', {
+        PaddingTop = UDim.new(0, 4);
+        PaddingLeft = UDim.new(0, 4);
+        PaddingRight = UDim.new(0, 4);
         Parent = TabArea;
     });
 
     local TabContainer = Library:Create('Frame', {
         BackgroundColor3 = Library.MainColor;
         BorderColor3 = Library.OutlineColor;
-        Position = UDim2.new(0, 8, 0, 30);
-        Size = UDim2.new(1, -16, 1, -38);
+        Position = UDim2.new(0, SidebarWidth + 16, 0, 8);
+        Size = UDim2.new(1, -SidebarWidth - 24, 1, -16);
         ZIndex = 2;
         Parent = MainSectionInner;
     });
-    
 
     Library:AddToRegistry(TabContainer, {
         BackgroundColor3 = 'MainColor';
@@ -3385,14 +3319,13 @@ function Library:CreateWindow(...)
             Tabboxes = {};
         };
 
-        local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
         local HasIcon = Icon and Icon ~= ''
-        local IconPad = HasIcon and 20 or 0
+        local IconPad = HasIcon and 22 or 8
 
         local TabButton = Library:Create('Frame', {
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
-            Size = UDim2.new(0, TabButtonWidth + 8 + 4 + IconPad, 1, 0);
+            Size = UDim2.new(1, 0, 0, 26);
             ZIndex = 1;
             Parent = TabArea;
         });
@@ -3403,18 +3336,18 @@ function Library:CreateWindow(...)
         });
 
         if HasIcon then
-            Library:CreateLucideIcon(Icon, TabButton, 14, Library.FontColor, 2)
-            local TabIcon = TabButton:FindFirstChildWhichIsA('Frame')
-            if TabIcon then
-                TabIcon.Position = UDim2.new(0, 4, 0.5, -7)
-                TabIcon.AnchorPoint = Vector2.new(0, 0)
+            local TabIconContainer = Library:CreateLucideIcon(Icon, TabButton, 14, Library.FontColor, 2)
+            if TabIconContainer then
+                TabIconContainer.Position = UDim2.new(0, 6, 0.5, -7)
             end
         end
 
         local TabButtonLabel = Library:CreateLabel({
-            Position = HasIcon and UDim2.new(0, IconPad, 0, 0) or UDim2.new(0, 0, 0, 0);
-            Size = HasIcon and UDim2.new(1, -IconPad, 1, -1) or UDim2.new(1, 0, 1, -1);
+            Position = UDim2.new(0, IconPad, 0, 0);
+            Size = UDim2.new(1, -IconPad, 1, 0);
+            TextSize = 14;
             Text = Name;
+            TextXAlignment = Enum.TextXAlignment.Left;
             ZIndex = 1;
             Parent = TabButton;
         });
@@ -3422,8 +3355,8 @@ function Library:CreateWindow(...)
         local Blocker = Library:Create('Frame', {
             BackgroundColor3 = Library.MainColor;
             BorderSizePixel = 0;
-            Position = UDim2.new(0, 0, 1, 0);
-            Size = UDim2.new(1, 0, 0, 1);
+            Position = UDim2.new(1, 0, 0, 0);
+            Size = UDim2.new(0, 1, 1, 0);
             BackgroundTransparency = 1;
             ZIndex = 3;
             Parent = TabButton;
