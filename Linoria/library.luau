@@ -9539,8 +9539,6 @@ function Library:CreateWindow(WindowInfo)
     end
 
 do
-        local ToggleBtnTexture = "rbxassetid://72530843154458"
-        
         local ToggleBtnSize = 56   
         local ToggleBtnIconSize = 45
 
@@ -9571,11 +9569,13 @@ do
             Parent = ToggleBtnFrame,
         })
 
-        local ToggleBtnIcon = New("ImageLabel", {
+        local ToggleBtnIcon = New("TextLabel", {
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundTransparency = 1,
-            Image = ToggleBtnTexture,
-            ImageColor3 = Color3.new(1, 1, 1),
+            Text = "GG",
+            TextColor3 = Color3.new(1, 1, 1),
+            TextSize = 18,
+            Font = Enum.Font.GothamBold,
             Position = UDim2.fromScale(0.5, 0.5),
             Size = UDim2.fromOffset(ToggleBtnIconSize, ToggleBtnIconSize),
             ZIndex = 10,
